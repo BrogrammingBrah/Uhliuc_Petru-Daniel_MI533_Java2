@@ -1,0 +1,1 @@
+"c:\lang\jdk\bin\java" pr2 >out.txt
