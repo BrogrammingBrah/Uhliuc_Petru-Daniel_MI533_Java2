@@ -7,7 +7,7 @@ class pr2 extends Frame {
     URL simFile;            
     String[] data;
 public static void main (String args[]){new pr2();}
-int q1, q2, q3, k, r,processes_count,start,nrfaze,cpu,io,repeat;
+int q1, q2, q3, k, r,processes_count,start,nrfaze,cpu,io,rpt;
 	String name;
 	Phase faze[];
 	Proces proc[];
@@ -21,13 +21,13 @@ pr2(){
     setBackground(new Color(38, 104, 165));
     setForeground(new Color(255,255,0));    
     setResizable(false);       
-    adaugaMenuBar(); 
+    AddMenuBar(); 
     setTitle("Window");                  
     resize(500,500);
     move((int)((dim.width-500)/2),(int)((dim.height-500)/2));
     show();     	
 }
-void adaugaMenuBar(){
+void AddMenuBar(){
 	MenuBar meniul=new MenuBar();
 	Menu f= new Menu("File");
 	f.add("Open");
@@ -40,21 +40,23 @@ public boolean handleEvent(Event e){
 		if(e.id==Event.WINDOW_DESTROY){
 		  System.exit(0);
 		  return true;
-		  }else if(e.id==Event.ACTION_EVENT && e.target instanceof MenuItem){
+		  }
+		  else if(e.id==Event.ACTION_EVENT && e.target instanceof MenuItem){
 		     if("Exit".equals(e.arg)){
 			   System.exit(0);
 			   return true;
-	} else if("Open".equals(e.arg)){
+	} 
+	else if("Open".equals(e.arg)){
 		loadFile();
 		return true;
-	}else return true;
+	}
+	else return true;
 }else return false;
 }
 void loadFile(){
 	try{
 		FileDialog fd=new FileDialog(this,"Open *.sim File",0);
 		if(dir!=null) fd.setDirectory(dir);
-		//fd.setFile("*.sim");
 		fd.setVisible(true);
 		if(fd.getFile()!=null){
 			dir=fd.getDirectory();
@@ -71,13 +73,13 @@ void loadFile(){
 	}
 	catch(Exception e){}
 }
-FileWriter fw;
+FileWriter fW;
 BufferedWriter bw;  
 void writeFile(File f) throws Exception {
     if (path!="") {
         if(f.exists()) f.delete();
-        FileWriter fw = new FileWriter(f);
-        BufferedWriter bw = new BufferedWriter(fw);
+        FileWriter fW = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(fW);
         for (int i = 0; i < data.length; i++) bw.write(modific(data[i]) + "\n");
         bw.flush();
         bw.close();
@@ -147,9 +149,9 @@ void readDataInput(URL simF){
 											try{io = Integer.parseInt(line.substring(0,line.indexOf(' ',0)));}
 											catch(NumberFormatException e){}   			
 											line = line.substring(line.indexOf('=')+1);
-											try{repeat = Integer.parseInt(line.substring(0,line.indexOf(' ',0)));}
+											try{rpt = Integer.parseInt(line.substring(0,line.indexOf(' ',0)));}
 											catch(NumberFormatException e){} 
-											faze[i]=new Phase(cpu,io,repeat);
+											faze[i]=new Phase(cpu,io,rpt);
 										}
 									proc[m]=new Proces(name,(char)(65+m),start,nrfaze,faze);
 									line=dtnpstr.readLine();
@@ -167,8 +169,8 @@ void readDataInput(URL simF){
 } 
 void writeDataOutput(){
 	try{
-			fw = new FileWriter(new File("output.htm"));
-			bw = new BufferedWriter(fw);   
+			fW = new FileWriter(new File("output.htm"));
+			bw = new BufferedWriter(fW);   
 			bw.write("<html><head><title>Proiect_simulator</title></head><body BACKGROUND=\"bkg.jpg\" BGPROPERTIES=\"fixed\"><center>");
 			bw.write("<a name='top'></a><br><br>");
 			bw.write("<h1>THREADS SIMULATION</h1><br>");			
@@ -223,13 +225,13 @@ void writeDataOutput(){
 				bw.write("<h4>SIMULATION OUTPUT DATA</h4>");
 				bw.write("<table width=100% border='2' >");
 				bw.write("<tr align='center'>");
-				bw.write("<th width=5%>TIME</th>");
-				bw.write("<th width=5%>CPU</th>");
-				bw.write("<th width=5%>I/O</th>");
-				bw.write("<th width=10%>Q1 Queue</th>");
-				bw.write("<th width=10%>Q2 Queue</th>");
-				bw.write("<th width=10%>Q3 Queue</th>");
-				bw.write("<th width=10%>I/O Queue</th>");
+				bw.write("<th width=7%>TIME</th>");
+				bw.write("<th width=7%>CPU</th>");
+				bw.write("<th width=7%>I/O</th>");
+				bw.write("<th width=12%>Q1 Queue</th>");
+				bw.write("<th width=12%>Q2 Queue</th>");
+				bw.write("<th width=12%>Q3 Queue</th>");
+				bw.write("<th width=12%>I/O Queue</th>");
 				bw.write("</tr> ");
 				proiect();
 				bw.write("</table>");
@@ -241,8 +243,8 @@ void writeDataOutput(){
 	}
 void proiect()throws IOException
 	{
-		int max=0,count=0,count2=0,i,countq2=0,countq3=0;
-		String Qadaug="",Qadaug2="",Qadaug3="";
+		int max=0,ct=0,ct2=0,i,qtc2=0,qtc3=0;
+		String addQ="",addQ2="",addQ3="";
 		boolean set=false;
 		for (i=0;i<processes_count;i++)
 			if(proc[i].startime>max)
@@ -255,12 +257,12 @@ void proiect()throws IOException
 			if (time<=max&&time>0)
 				for (i=0;i<processes_count;i++)
 					if(proc[i].startime==time)
-						Qadaug+=proc[i].ALIAS;
-			if (Q1.compareTo("")!=0||count!=0)
+						addQ+=proc[i].ALIAS;
+			if (Q1.compareTo("")!=0||ct!=0)
 			{
-			if (countq2<q2&&countq2!=0) {Q2=alias+Q2; countq2=0;}
-			  if (countq3<q3&&countq3!=0) {Q3=alias+Q3; countq3=0;}
-				if (count==0)
+			if (qtc2<q2&&qtc2!=0) {Q2=alias+Q2; qtc2=0;}
+			  if (qtc3<q3&&qtc3!=0) {Q3=alias+Q3; qtc3=0;}
+				if (ct==0)
 				{
 					alias=Q1.charAt(0);
 					proces_curent=daProces(alias);
@@ -274,7 +276,7 @@ void proiect()throws IOException
 					{
 						write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 						time++;
-						count=0;
+						ct=0;
 						proces_curent.finished=true;
 						bw.write("<tr><td colspan=7 bgcolor='#ff0000' align='center'>Process "+((int)(alias)-64)+" is finished.</td></tr>");
 						finished=test();
@@ -283,13 +285,13 @@ void proiect()throws IOException
 				write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 				if (IO_proc!=null)
 				{
-					if (count2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
-						count2++;
-					if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==count2)
+					if (ct2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
+						ct2++;
+					if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==ct2)
 					{
 						switch (IO_proc.from)
 							{
-								case 1:	Qadaug+=IO_proc.ALIAS; break;
+								case 1:	addQ+=IO_proc.ALIAS; break;
 								case 2: Q2+=IO_proc.ALIAS; break;
 								case 3: Q3+=IO_proc.ALIAS; break;
 							}
@@ -298,7 +300,7 @@ void proiect()throws IOException
 								IO_proc.faza_curenta++;
 								bw.write("<tr><td colspan=7 bgcolor='#ffff00' align='center'>Phase #"+IO_proc.faza_curenta+" of the Process #"+((int)(alias2)-64)+" is finished</td></tr>");
 							}	
-						count2=0;
+						ct2=0;
 						IO_proc=null;
 						alias2='-';
 						if (QIO.compareTo("")!=0)
@@ -319,7 +321,7 @@ void proiect()throws IOException
 						daProces(alias).from=1;	
 						if (!set)
 						{
-							if (count2==0)
+							if (ct2==0)
 							{
 								alias2=QIO.charAt(0);
 								QIO=QIO.substring(1);
@@ -327,15 +329,15 @@ void proiect()throws IOException
 							}
 						}
 						set=false;
-						count=0; countq2=0;countq3=0;
-						if (Qadaug.length()>1)
-							Qadaug=Qsort(Qadaug);
-						Q1+=Qadaug;
-						Qadaug="";
+						ct=0; qtc2=0;qtc3=0;
+						if (addQ.length()>1)
+							addQ=Qsort(addQ);
+						Q1+=addQ;
+						addQ="";
 						time++;
 						continue;
 					}
-				if (count==q1-1)
+				if (ct==q1-1)
 				{
 					proces_curent.penalty++;
 					if(proces_curent.penalty==k)
@@ -345,21 +347,21 @@ void proiect()throws IOException
 						daProces(alias).from=2;
 						}
 					else
-						Qadaug+=alias;
-					count=0;
+						addQ+=alias;
+					ct=0;
 				}
-				else count++;
-				if (Qadaug.length()>1)
-					Qadaug=Qsort(Qadaug);
-				Q1+=Qadaug;
-				Qadaug="";
+				else ct++;
+				if (addQ.length()>1)
+					addQ=Qsort(addQ);
+				Q1+=addQ;
+				addQ="";
 			}
 			else
 			{
-				if (Q2.compareTo("")!=0||countq2!=0)
+				if (Q2.compareTo("")!=0||qtc2!=0)
 				{
-					if (countq3<q3&&countq3!=0) {Q3=alias+Q3; countq3=0;}
-					if (countq2==0)
+					if (qtc3<q3&&qtc3!=0) {Q3=alias+Q3; qtc3=0;}
+					if (qtc2==0)
 					{
 						alias=Q2.charAt(0);
 						proces_curent=daProces(alias);
@@ -373,7 +375,7 @@ void proiect()throws IOException
 					{
 						write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 						time++;
-						countq2=0;
+						qtc2=0;
 						proces_curent.finished=true;
 						bw.write("<tr><td colspan=7 bgcolor='#ff0000' align='center'>Process "+((int)(alias)-64)+" is finished.</td></tr>");
 						finished=test();
@@ -382,14 +384,14 @@ void proiect()throws IOException
 					write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 					if (IO_proc!=null)
 					{
-						if (count2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
-							count2++;
-						if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==count2)
+						if (ct2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
+							ct2++;
+						if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==ct2)
 						{
 							switch (IO_proc.from)
 							{
 								case 1:	Q1+=IO_proc.ALIAS; break;
-								case 2: Qadaug2+=IO_proc.ALIAS; break;
+								case 2: addQ2+=IO_proc.ALIAS; break;
 								case 3: Q3+=IO_proc.ALIAS; break;
 							}
 							
@@ -398,7 +400,7 @@ void proiect()throws IOException
 								IO_proc.faza_curenta++;
 								bw.write("<tr><td colspan=7 bgcolor='#ffff00' align='center'>Phase #"+IO_proc.faza_curenta+" of the Process  #"+((int)(alias2)-64)+" is finished.</td></tr>");
 							}
-							count2=0;
+							ct2=0;
 							IO_proc=null;
 							alias2='-';
 							if (QIO.compareTo("")!=0)
@@ -424,7 +426,7 @@ void proiect()throws IOException
 							}
 							if (!set)
 								{
-									if (count2==0)
+									if (ct2==0)
 									{
 										alias2=QIO.charAt(0);
 										QIO=QIO.substring(1);
@@ -432,36 +434,36 @@ void proiect()throws IOException
 									}
 								}
 							set=false;
-							countq2=0;
-							countq3=0;
-							if (Qadaug2.length()>1)
-								Qadaug2=Qsort(Qadaug2);
-							Q2+=Qadaug2;
-							Qadaug2="";
+							qtc2=0;
+							qtc3=0;
+							if (addQ2.length()>1)
+								addQ2=Qsort(addQ2);
+							Q2+=addQ2;
+							addQ2="";
 							time++;
 							continue;
 						}
 					set=false;
-					if (countq2==q2-1)
+					if (qtc2==q2-1)
 					{
 						proces_curent.penalty++;
 						if(proces_curent.penalty==k)
 							Q3+=alias;
 						else
-							Qadaug2+=alias;
-						countq2=0;
+							addQ2+=alias;
+						qtc2=0;
 					}
-					else countq2++;
-					if (Qadaug2.length()>1)
-						Qadaug2=Qsort(Qadaug2);
-					Q2+=Qadaug2;
-					Qadaug2="";
+					else qtc2++;
+					if (addQ2.length()>1)
+						addQ2=Qsort(addQ2);
+					Q2+=addQ2;
+					addQ2="";
 				}
 				else
 				{
-					if (Q3.compareTo("")!=0||countq3!=0)
+					if (Q3.compareTo("")!=0||qtc3!=0)
 					{
-						if (countq3==0)
+						if (qtc3==0)
 						{
 							alias=Q3.charAt(0);
 							proces_curent=daProces(alias);
@@ -475,7 +477,7 @@ void proiect()throws IOException
 						{
 							write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 							time++;
-							countq3=0;
+							qtc3=0;
 							proces_curent.finished=true;
 							bw.write("<tr><td colspan=7 bgcolor='#ff0000' align='center'>Process "+((int)(alias)-64)+" is finished</td></tr>");
 							finished=test();
@@ -484,15 +486,15 @@ void proiect()throws IOException
 						write_on_rand(time,alias,alias2,Q1,Q2,Q3,QIO);
 						if (IO_proc!=null)		
 						{
-							if (count2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
-								count2++;
-							if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==count2)
+							if (ct2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
+								ct2++;
+							if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==ct2)
 							{
 								switch (IO_proc.from)
 								{
 									case 1:	Q1+=IO_proc.ALIAS; break;
 									case 2: Q2+=IO_proc.ALIAS; break;
-									case 3: Qadaug3+=IO_proc.ALIAS; break;
+									case 3: addQ3+=IO_proc.ALIAS; break;
 								}
 								
 								if (IO_proc.phases[IO_proc.faza_curenta].REPEAT_COUNT==0)
@@ -500,7 +502,7 @@ void proiect()throws IOException
 									IO_proc.faza_curenta++;
 									bw.write("<tr><td colspan=7 bgcolor='#ffff00' align='center'>Phase #"+IO_proc.faza_curenta+" of the Process #"+((int)(alias2)-64)+" is finished</td></tr>");
 								}
-								count2=0;
+								ct2=0;
 								IO_proc=null;
 								alias2='-';
 								if (QIO.compareTo("")!=0)
@@ -526,7 +528,7 @@ void proiect()throws IOException
 							}
 							if (!set)
 								{
-									if (count2==0)
+									if (ct2==0)
 									{
 										alias2=QIO.charAt(0);
 										QIO=QIO.substring(1);
@@ -534,26 +536,26 @@ void proiect()throws IOException
 									}
 								}
 							set=false;
-							countq3=0;
-							if (Qadaug3.length()>1)
-								Qadaug3=Qsort(Qadaug3);
-							Q3+=Qadaug3;
-							Qadaug3="";
+							qtc3=0;
+							if (addQ3.length()>1)
+								addQ3=Qsort(addQ3);
+							Q3+=addQ3;
+							addQ3="";
 							time++;
 							continue;
 						}
 						set=false;
-						if (countq3==q3-1)
+						if (qtc3==q3-1)
 						{
 							proces_curent.penalty++;
-								Qadaug3+=alias;
-							countq3=0;
+								addQ3+=alias;
+							qtc3=0;
 						}
-						else countq3++;
-						if (Qadaug3.length()>1)
-							Qadaug3=Qsort(Qadaug3);
-						Q3+=Qadaug3;
-						Qadaug3="";
+						else qtc3++;
+						if (addQ3.length()>1)
+							addQ3=Qsort(addQ3);
+						Q3+=addQ3;
+						addQ3="";
 					}
 					else
 					{
@@ -561,9 +563,9 @@ void proiect()throws IOException
 						write_on_rand(time,alias,alias2,Q1,Q3,Q3,QIO);
 						if (IO_proc!=null)
 						{
-							if (count2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
-								count2++;
-							if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==count2)
+							if (ct2<IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT)
+								ct2++;
+							if (IO_proc.phases[IO_proc.faza_curenta].IO_TIMES_COUNT==ct2)
 							{
 								switch (IO_proc.from)
 								{
@@ -576,7 +578,7 @@ void proiect()throws IOException
 									IO_proc.faza_curenta++;
 									bw.write("<tr><td colspan=7 bgcolor='#ffff00' align='center'>Phase #"+IO_proc.faza_curenta+" of the Process #"+((int)(alias2)-64)+" </td></tr>");
 								}
-								count2=0;
+								ct2=0;
 								IO_proc=null;
 								alias2='-';
 								if (QIO.compareTo("")!=0)
@@ -616,14 +618,13 @@ void write_on_rand(long t, char prCpu, char prIO, String c1, String c2, String c
 		bw.write("<tr align='center'>");
 		bw.write("<td><font color='#0000ff'>"+tt+"</font></td>");
 		if (prCpu!='-')
-			bw.write("<td><a href=#p"+((int)(prCpu-64))+">"+prCpu+"</a></td>");
+			bw.write("<td>CPU: <a href=#p"+((int)(prCpu-64))+">"+prCpu+"</a></td>");
 		else
-			bw.write("<td>"+prCpu+"</td>\n");
-			
+			bw.write("<td>CPU: "+prCpu+"</td>\n");
 		if (prIO!='-')
-			bw.write("<td><a href=#p"+((int)(prIO-64))+">"+prIO+"</a></td>");
+			bw.write("<td>I/O: <a href=#p"+((int)(prIO-64))+">"+prIO+"</a></td>");
 		else
-			bw.write("<td>"+prIO+"</td>");
+			bw.write("<td>I/O: "+prIO+"</td>");
 		bw.write("<td>"+c1+"</td>");
 		bw.write("<td>"+c2+"</td>");
 		bw.write("<td>"+c3+"</td>");
@@ -670,11 +671,11 @@ class Phase{
 	public int IO_TIMES_COUNT;
 	public int REPEAT_COUNT;
 	public int cpu_bak;
-	public Phase(int cpu, int io, int repeat)
+	public Phase(int cpu, int io, int rpt)
 	{
 		CPU_TIMES_COUNT=cpu;
 		IO_TIMES_COUNT=io;
-		REPEAT_COUNT=repeat;
+		REPEAT_COUNT=rpt;
 		cpu_bak=cpu;
 	}
 }
@@ -687,13 +688,13 @@ class Proces
 	public Phase []phases;
 	public int faza_curenta=0;
 	public int penalty=0, award=0;
-	private int cpu,io,repeat;
+	private int cpu,io,rpt;
 	public int from=0;
 	public boolean finished=false;
-	public Proces(String nume, char porecla, int start, int nrfaze, Phase []faze)
+	public Proces(String nume, char nickname, int start, int nrfaze, Phase []faze)
 	{
 		NAME=nume;
-		ALIAS=porecla;
+		ALIAS=nickname;
 		startime=start;
 		PHASES_COUNT=nrfaze;
 		phases=faze;
